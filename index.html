@@ -14,13 +14,13 @@
             (function () {
                 var states = ["green", "red", "orange"];
                 var dayLabels = [
+                    { full: "Sunday", short: "Sun" },
                     { full: "Monday", short: "Mon" },
                     { full: "Tuesday", short: "Tue" },
                     { full: "Wednesday", short: "Wed" },
                     { full: "Thursday", short: "Thu" },
                     { full: "Friday", short: "Fri" },
-                    { full: "Saturday", short: "Sat" },
-                    { full: "Sunday", short: "Sun" }
+                    { full: "Saturday", short: "Sat" }
                 ];
                 var grid = document.getElementById("calendarContainer");
                 if (!grid) {
@@ -33,7 +33,7 @@
                 var normalizedToday = new Date(currentYear, currentMonth, today.getDate());
                 var firstOfMonth = new Date(currentYear, currentMonth, 1);
                 var daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-                var startOffset = (firstOfMonth.getDay() + 6) % 7; // Monday = 0
+                var startOffset = firstOfMonth.getDay(); // Sunday = 0
                 var startDate = new Date(firstOfMonth);
                 startDate.setDate(firstOfMonth.getDate() - startOffset);
                 var rowsToRender = 4;
