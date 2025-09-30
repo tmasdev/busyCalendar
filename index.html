@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="calendarContainer"></div>
+        <div id="navTextContainer">
+            <a href="https://tmas.dev" id="navHref">Home</a>
+        </div>
+        <script>
+            (function () {
+                var states = ["green", "red", "orange"];
+                var dayLabels = [
+                    { full: "Monday", short: "Mon" },
+                    { full: "Tuesday", short: "Tue" },
+                    { full: "Wednesday", short: "Wed" },
+                    { full: "Thursday", short: "Thu" },
+                    { full: "Friday", short: "Fri" },
+                    { full: "Saturday", short: "Sat" },
+                    { full: "Sunday", short: "Sun" }
+                ];
+                var grid = document.getElementById("calendarContainer");
+                if (!grid) {
+                    return;
+                }
+
+                var today = new Date();
+                var currentYear = today.getFullYear();
+                var currentMonth = today.getMonth();
+                var normalizedToday = new Date(currentYear, currentMonth, today.getDate());
+                var firstOfMonth = new Date(currentYear, currentMonth, 1);
+                var daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+                var startOffset = (firstOfMonth.getDay() + 6) % 7; // Monday = 0
+                var startDate = new Date(firstOfMonth);
+                startDate.setDate(firstOfMonth.getDate() - startOffset);
+                var rowsToRender = 4;
+                var totalSlots = rowsToRender * 7;
+                var mod = function (value, divisor) {
+                    return (value % divisor + divisor) % divisor;
+                };
+                var millisPerDay = 24 * 60 * 60 * 1000;
+                var todayIndex = Math.floor((normalizedToday.getTime() - startDate.getTime()) / millisPerDay);
+                var todayRow = Math.max(0, Math.floor(todayIndex / 7));
+                var rowShift = todayRow * 7;
+
+                for (var dayIndex = 0; dayIndex < dayLabels.length; dayIndex += 1) {
+                    var headerCell = document.createElement("div");
+                    headerCell.className = "calendar-header";
+                    headerCell.setAttribute("aria-label", dayLabels[dayIndex].full);
+                    headerCell.textContent = dayLabels[dayIndex].short;
+                    grid.appendChild(headerCell);
+                }
+
+                for (var index = 0; index < totalSlots; index += 1) {
+                    var shiftedIndex = rowShift + index;
+                    var cellDate = new Date(startDate);
+                    cellDate.setDate(startDate.getDate() + shiftedIndex);
+
+                    var cell = document.createElement("button");
+                    cell.type = "button";
+                    var displayDay = mod(shiftedIndex - startOffset, daysInMonth) + 1;
+                    cell.textContent = String(displayDay);
+                    cell.setAttribute(
+                        "aria-label",
+                        cellDate.toLocaleDateString(undefined, {
+                            weekday: "long",
+                            month: "long",
+                            day: "numeric"
+                        })
+                    );
+
+                    if (cellDate.getTime() <= normalizedToday.getTime()) {
+                        cell.className = "calendar-cell calendar-cell-locked";
+                        cell.disabled = true;
+                    } else {
+                        cell.className = "calendar-cell cell-green";
+                        cell.dataset.stateIndex = "0";
+                    }
+
+                    grid.appendChild(cell);
+                }
+
+                grid.addEventListener("click", function (event) {
+                    var target = event.target;
+                    if (!(target instanceof HTMLButtonElement)) {
+                        return;
+                    }
+                    if (!target.classList.contains("calendar-cell")) {
+                        return;
+                    }
+                    if (target.disabled) {
+                        return;
+                    }
+                    var currentIndex = Number(target.dataset.stateIndex || "0");
+                    var nextIndex = (currentIndex + 1) % states.length;
+                    for (var i = 0; i < states.length; i += 1) {
+                        target.classList.remove("cell-" + states[i]);
+                    }
+                    var nextState = states[nextIndex];
+                    target.classList.add("cell-" + nextState);
+                    target.dataset.stateIndex = String(nextIndex);
+                });
+            })();
+        </script>
+    </body>
+</html>

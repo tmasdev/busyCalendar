@@ -1,0 +1,113 @@
+:root{
+    --system-gray-6: #1c1c1e;
+    --system-gray-5: #2c2c2e;
+    --system-gray-4: #3a3a3c;
+    --system-gray-3: #48484a;
+    --system-gray-1: #8e8e93;
+    --text-primary: #ffffff;
+    --system-green: #30d158;
+    --system-orange: #ff9f0a;
+    --system-red: #ff453a;
+}
+
+html{
+    background-color: var(--system-gray-6);
+    color: var(--text-primary);
+}
+
+body{
+    margin: 0;
+    min-height: 100vh;
+    background-color: transparent;
+    color: inherit;
+    font-family: "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#calendarContainer{
+    margin: 8vh auto 4vh;
+    width: min(90vw, 1100px);
+    padding: 2.5vh;
+    border-radius: 20px;
+    background-color: var(--system-gray-4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 0.5fr) repeat(4, 1fr);
+    gap: 1.2vh;
+}
+
+.calendar-header{
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: clamp(0.9rem, 2.4vw, 1.1rem);
+    letter-spacing: 0.1em;
+    color: var(--text-primary);
+    background-color: var(--system-gray-3);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    text-transform: uppercase;
+}
+
+.calendar-cell{
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    font-weight: 600;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--text-primary);
+    background-color: var(--system-green);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.calendar-cell:focus-visible{
+    outline: 2px solid var(--system-gray-1);
+    outline-offset: 3px;
+}
+
+.calendar-cell.cell-green{
+    background-color: var(--system-green);
+}
+
+.calendar-cell.cell-red{
+    background-color: var(--system-red);
+}
+
+.calendar-cell.cell-orange{
+    background-color: var(--system-orange);
+}
+
+.calendar-cell-locked{
+    background-color: var(--system-gray-3);
+    color: var(--text-primary);
+    cursor: default;
+    pointer-events: none;
+    opacity: 1;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+#navTextContainer{
+    position: absolute;
+    top: 4vh;
+    right: 11vh;
+    width: 9vh;
+    height: 3vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 1px var(--system-gray-1);
+    border-radius: 10%;
+    background-color: var(--system-gray-5);
+}
+
+#navHref{
+    font-family: inherit;
+    font-size: 1.5vh;
+    color: var(--text-primary);
+    text-decoration: none;
+}
